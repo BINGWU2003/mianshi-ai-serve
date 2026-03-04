@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 export interface User {
   id: number;
   name: string;
@@ -8,6 +8,9 @@ export interface User {
 
 @Injectable()
 export class UserService {
+  constructor(@Inject('DATABASE_CONNECTION') private readonly db: any) {
+    console.log(this.db);
+  }
   private readonly users: User[] = [
     {
       id: 1,

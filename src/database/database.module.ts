@@ -5,11 +5,11 @@ import { Module } from '@nestjs/common';
     {
       provide: 'DATABASE_CONNECTION',
       useFactory: (configService: ConfigService) => {
-        const dbType = configService.get('DB_TYPE');
+        const dbType = configService.get<string>('DB_TYPE');
         if (dbType === 'mongodb') {
           return {
             type: 'mongodb',
-            url: configService.get('DB_URL'),
+            url: configService.get<string>('DB_URL'),
           };
         } else {
           throw new Error(`Unsupported database type: ${dbType}`);

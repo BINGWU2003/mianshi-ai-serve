@@ -5,15 +5,19 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import type { User } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { AuthGuard } from '../auth/auth.guard';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll(): User[] {
     console.log('findAll');
     return this.userService.findAll();
@@ -28,8 +32,8 @@ export class UserController {
     return user;
   }
   @Post()
-  create(@Body() user: Omit<User, 'id'>): User {
-    return this.userService.create(user);
+  create(@Body() user: CreateUserDto): User {
+    return this.userService.create(user as Omit<User, 'id'>);
   }
   @Put(':id')
   update(@Param('id') id: number, @Body() user: Omit<User, 'id'>): User | null {
